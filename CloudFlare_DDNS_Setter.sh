@@ -5,7 +5,7 @@ Error="${Red_font}[Error]${Font_suffix}"
 echo -e "${Green_font}
 #=======================================
 # Project: CloudFlare_DDNS_Setter
-# Version: 1.0
+# Version: 1.01
 # Author: nanqinlang
 # Blog:   https://sometimesnaive.org
 # Github: https://github.com/nanqinlang
@@ -48,6 +48,7 @@ define(){
 
 	record_id=`cat config.conf | grep "record_id" | awk -F "=" '{print $NF}'`
 	domain=`cat config.conf | grep "domain" | awk -F "=" '{print $NF}'`
+	rec_type=`cat config.conf | grep "rec_type" | awk -F "=" '{print $NF}'`
 	ttl=`cat config.conf | grep "ttl" | awk -F "=" '{print $NF}'`
 
 	dynamic_ip=`curl ip.sb`
@@ -88,7 +89,7 @@ curl -X PUT "https://api.cloudflare.com/client/v4/zones/${zone_id}/dns_records/$
 	 -H "X-Auth-Email: ${email}" \
 	 -H "X-Auth-Key: ${api_key}" \
 	 -H "Content-Type: application/json" \
-	 --data '{"type":"A", "name":"'${domain}'", "content":"'${dynamic_ip}'", "ttl":'${ttl}', "proxied":false}'
+	 --data '{"type":"'${rec_type}'", "name":"'${domain}'", "content":"'${dynamic_ip}'", "ttl":'${ttl}', "proxied":false}'
 }
 
 create_record(){
@@ -96,7 +97,7 @@ curl -X POST "https://api.cloudflare.com/client/v4/zones/${zone_id}/dns_records"
 	 -H "X-Auth-Email: ${email}" \
 	 -H "X-Auth-Key: ${api_key}" \
 	 -H "Content-Type: application/json" \
-	 --data '{"type":"A", "name":"'${domain}'", "content":"'${dynamic_ip}'", "ttl":'${ttl}', "proxied":false}'
+	 --data '{"type":"'${rec_type}'", "name":"'${domain}'", "content":"'${dynamic_ip}'", "ttl":'${ttl}', "proxied":false}'
 }
 
 
